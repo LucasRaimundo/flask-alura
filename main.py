@@ -5,6 +5,6 @@ app = Flask(__name__)
 
 @app.route('/home')
 def home():
-    return render_template('lista.html')
+    return render_template('lista.html', titulo='Games')
 
 app.run()
