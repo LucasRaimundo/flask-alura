@@ -22,6 +22,9 @@ def home():
 
 @app.route('/newgame')
 def new_game():
+    if 'log_user' not in session or session['log_user'] == None:
+        flash('You need to be logged in to add a game!')
+        return redirect('/login')
     return render_template('new.html', titulo='New Game')
 
 @app.route('/games/new', methods=['POST'])
