@@ -47,5 +47,12 @@ def autenticate():
     else:
         flash('Invalid password!')
         return redirect('/login')
+    
+
+@app.route('/logout')
+def logout():
+    session['log_user'] = None
+    flash('Logout successful!')
+    return redirect('/login')
 
 app.run(debug=True)
