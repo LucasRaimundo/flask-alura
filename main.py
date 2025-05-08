@@ -24,7 +24,7 @@ def home():
 def new_game():
     if 'log_user' not in session or session['log_user'] == None:
         flash('You need to be logged in to add a game!')
-        return redirect('/login')
+        return redirect('/login?next=newgame')
     return render_template('new.html', titulo='New Game')
 
 @app.route('/games/new', methods=['POST'])
@@ -39,14 +39,16 @@ def create_game():
 
 @app.route('/login')
 def login():
-    return render_template('login.html', titulo='Login')
+    next = request.args.get('next')
+    return render_template('login.html', next=next)
 
 @app.route('/autenticate', methods=['POST'])
 def autenticate():
     if 'alohomora' == request.form['password']:
         session['log_user'] = request.form['username']
         flash( session['log_user'] +' Login successful!')
-        return redirect('/')
+        next_page = request.form['next']
+        return redirect('/{}'.format(next_page))
     else:
         flash('Invalid password!')
         return redirect('/login')
