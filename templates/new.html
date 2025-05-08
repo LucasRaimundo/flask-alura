@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 {% block content %}
-      <form method="post" action="/games/new">
+      <form method="post" action="{{url_for('create_game')}}">
         <fieldset>
           <div class="form-group">
             <label for="nome">Name</label>

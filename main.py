@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, url_for
 
 class Game:
     def __init__(self, name, genre, platform):
@@ -24,7 +24,7 @@ def home():
 def new_game():
     if 'log_user' not in session or session['log_user'] == None:
         flash('You need to be logged in to add a game!')
-        return redirect('/login?next=newgame')
+        return redirect(url_for('login', next='newgame'))
     return render_template('new.html', titulo='New Game')
 
 @app.route('/games/new', methods=['POST'])
@@ -35,7 +35,7 @@ def create_game():
 
     game = Game(name, genre, platform)
     games.append(game)
-    return redirect('/')
+    return redirect(url_for('home'))
 
 @app.route('/login')
 def login():
@@ -48,16 +48,16 @@ def autenticate():
         session['log_user'] = request.form['username']
         flash( session['log_user'] +' Login successful!')
         next_page = request.form['next']
-        return redirect('/{}'.format(next_page))
+        return redirect(next_page)
     else:
         flash('Invalid password!')
-        return redirect('/login')
+        return redirect(url_for('login'))
     
 
 @app.route('/logout')
 def logout():
     session['log_user'] = None
     flash('Logout successful!')
-    return redirect('/login')
+    return redirect(url_for('login'))
 
 app.run(debug=True)
