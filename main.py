@@ -1,5 +1,11 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
 
+class User:
+    def __init__(self, name, username, password):
+        self.name = name
+        self.username = username
+        self.password = password
+
 class Game:
     def __init__(self, name, genre, platform):
         self.name = name
@@ -11,6 +17,11 @@ game2 = Game('Hogwarts Legacy', 'Action RPG', 'All')
 game3 = Game('Call of Duty', 'FPS', 'All')
 games = [game1, game2, game3]
 
+user = User('Lucas', 'lucas', 'Alohomora')
+user1 = User('Gabriel', 'gabriel', 'Nox')
+user2 = User('Pedro', 'pedro', 'ExpectoPatronum')
+
+users = {user.username: user, user1.username: user1, user2.username: user2}
 
 app = Flask(__name__)
 app.secret_key = 'alura'
@@ -44,11 +55,14 @@ def login():
 
 @app.route('/autenticate', methods=['POST'])
 def autenticate():
-    if 'alohomora' == request.form['password']:
-        session['log_user'] = request.form['username']
-        flash( session['log_user'] +' Login successful!')
-        next_page = request.form['next']
-        return redirect(next_page)
+    if request.form['username'] in users:
+        user = users[request.form['username']]
+        if request.form['password'] == user.password:
+            session['log_user'] = user.username
+            flash('Login successful!')
+            next_page = request.form['next']
+            return redirect(next_page)
+
     else:
         flash('Invalid password!')
         return redirect(url_for('login'))
