@@ -15,6 +15,13 @@ def new_game():
         return redirect(url_for('login', next='newgame'))
     return render_template('new.html', titulo='New Game')
 
+@app.route('/update/<int:id>')
+def update(id):
+    if 'log_user' not in session or session['log_user'] == None:
+        return redirect(url_for('login', next='newgame'))
+    game = Games.query.filter_by(id=id).first()
+    return render_template('update.html', titulo='Update Game', game = game)
+
 @app.route('/games/new', methods=['POST'])
 def create_game():
     name = request.form['name']
@@ -32,6 +39,18 @@ def create_game():
     flash('Game added successfully!')
     
     return redirect(url_for('home'))
+
+@app.route('/update_game', methods=['POST'])
+def update_game():
+   game = Games.query.filter_by(id=request.form['id']).first()
+   game.name = request.form['name']
+   game.genre = request.form['genre']
+   game.platform = request.form['platform']
+
+   db.session.add(game)
+   db.session.commit()
+
+   return redirect(url_for('home'))
 
 @app.route('/login')
 def login():
