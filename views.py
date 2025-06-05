@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for, send_from_directory
 from app_factory import app, db
 from models import Games, Users
+from helpers import recoverImage
 
 
 @app.route('/')
@@ -20,7 +21,8 @@ def update(id):
     if 'log_user' not in session or session['log_user'] == None:
         return redirect(url_for('login', next='newgame'))
     game = Games.query.filter_by(id=id).first()
-    return render_template('update.html', titulo='Update Game', game = game)
+    cover_game = recoverImage(game.id)
+    return render_template('update.html', titulo='Update Game', game = game, cover_game=cover_game)
 
 @app.route('/games/new', methods=['POST'])
 def create_game():
@@ -53,7 +55,10 @@ def update_game():
 
    db.session.add(game)
    db.session.commit()
-
+   file = request.files['file']
+   uploads_path = app.config['UPLOAD_PATH']
+   file.save(f'{uploads_path}/cover{game.id}.jpeg')
+    
    return redirect(url_for('home'))
 
 @app.route('/delete/<int:id>')
@@ -99,3 +104,5 @@ def logout():
 @app.route('/uploads/<namefile>')
 def image(namefile):
     return send_from_directory('uploads', namefile)
+
+
