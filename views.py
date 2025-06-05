@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for, send_from_directory
 from app_factory import app, db
 from models import Games, Users
-from helpers import recoverImage
+from helpers import recoverImage, deleteFile
+import time
 
 
 @app.route('/')
@@ -42,7 +43,8 @@ def create_game():
 
     file = request.files['file']
     uploads_path = app.config['UPLOAD_PATH']
-    file.save(f'{uploads_path}/cover{new_game.id}.jpeg')
+    timestamp = time.time()
+    file.save(f'{uploads_path}/cover{new_game.id}-{timestamp}.jpeg')
     
     return redirect(url_for('home'))
 
@@ -57,7 +59,11 @@ def update_game():
    db.session.commit()
    file = request.files['file']
    uploads_path = app.config['UPLOAD_PATH']
-   file.save(f'{uploads_path}/cover{game.id}.jpeg')
+
+
+   deleteFile(game.id)
+   timestamp = time.time()
+   file.save(f'{uploads_path}/cover{game.id}-{timestamp}.jpeg')
     
    return redirect(url_for('home'))
 
