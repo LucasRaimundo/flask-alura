@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, flash, url_for
+from flask import Flask, render_template, request, redirect, session, flash, url_for, send_from_directory
 from app_factory import app, db
 from models import Games, Users
 
@@ -94,3 +94,8 @@ def logout():
     session['log_user'] = None
     flash('Logout successful!')
     return redirect(url_for('login'))
+
+
+@app.route('/uploads/<namefile>')
+def image(namefile):
+    return send_from_directory('uploads', namefile)
