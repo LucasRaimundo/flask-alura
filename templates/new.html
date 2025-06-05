@@ -1,6 +1,7 @@
 {% extends "template.html" %}
 {% block content %}
-      <form method="post" action="{{url_for('create_game')}}">
+      <form method="post" action="{{url_for('create_game')}}" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".jpeg">
         <fieldset>
           <div class="form-group">
             <label for="nome">Name</label>

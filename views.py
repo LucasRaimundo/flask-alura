@@ -37,6 +37,9 @@ def create_game():
     db.session.add(new_game)
     db.session.commit()
     flash('Game added successfully!')
+
+    file = request.files['file']
+    file.save(f'uploads/{file.filename}.jpg')
     
     return redirect(url_for('home'))
 
