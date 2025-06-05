@@ -59,10 +59,8 @@ def update_game():
    db.session.commit()
    file = request.files['file']
    uploads_path = app.config['UPLOAD_PATH']
-
-
-   deleteFile(game.id)
    timestamp = time.time()
+   deleteFile(game.id)
    file.save(f'{uploads_path}/cover{game.id}-{timestamp}.jpeg')
     
    return redirect(url_for('home'))
