@@ -7,6 +7,7 @@
                <th>Genre</th>
                <th>Platform</th>
                <th></th>
+               <th></th>
             </tr>
         </thead>
         <tbody>
@@ -15,7 +16,10 @@
               <td>{{game.name}}</td>
               <td>{{game.genre}}</td>
               <td>{{game.platform}}</td>
-              <td><a href="{{ url_for('update', id=game.id) }}">Edit</a></td>
+              <td>
+               <a href="{{ url_for('update', id=game.id) }}">Edit</a>
+            </td>
+            <td><a href="{{ url_for('delete', id=game.id)}}">Delete</a></td>
            </tr>
             {% endfor %}
         </tbody>

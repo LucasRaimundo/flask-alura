@@ -52,6 +52,19 @@ def update_game():
 
    return redirect(url_for('home'))
 
+@app.route('/delete/<int:id>')
+def delete(id):
+    if 'log_user' not in session or session['log_user'] == None:
+        flash('You need to be logged in to delete a game!')
+        return redirect(url_for('login'))
+    
+    game = Games.query.filter_by(id=id).first()
+    db.session.delete(game)
+    db.session.commit()
+    flash('Game deleted successfully!')
+    
+    return redirect(url_for('home'))
+
 @app.route('/login')
 def login():
     next = request.args.get('next')
