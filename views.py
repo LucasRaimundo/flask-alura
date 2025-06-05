@@ -39,7 +39,8 @@ def create_game():
     flash('Game added successfully!')
 
     file = request.files['file']
-    file.save(f'uploads/{file.filename}.jpg')
+    uploads_path = app.config['UPLOAD_PATH']
+    file.save(f'{uploads_path}/cover{new_game.id}.jpeg')
     
     return redirect(url_for('home'))
 
